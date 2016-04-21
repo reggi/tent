@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import 'babel-polyfill'
 import { join } from 'path'
 import yargs from 'yargs'
 import { buildPackage, buildModule, getGist } from './index'
