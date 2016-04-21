@@ -11,14 +11,14 @@ import fs from 'fs-extra'
 
 Promise.promisifyAll(fs)
 
-export function niftDeps () {
+export function tentDeps () {
   return async function () {
     let dependencies = await depFinder(this.file)
     return { dependencies }
   }
 }
 
-export function niftName (name) {
+export function tentName (name) {
   return function () {
     name = name || this.name
     if (!name) throw new Error('name is not specified')
@@ -26,7 +26,7 @@ export function niftName (name) {
   }
 }
 
-export function niftVersion (version) {
+export function tentVersion (version) {
   return function () {
     version = version || this.version
     if (!version) throw new Error('version is not specified')
@@ -34,7 +34,7 @@ export function niftVersion (version) {
   }
 }
 
-export function niftBabel ({presets = [], plugins = [], buildScript = 'build'}) {
+export function tentBabel ({presets = [], plugins = [], buildScript = 'build'}) {
   return async function () {
     let presetsDeps = (presets) ? map(presets, preset => `babel-preset-${preset}`) : []
     let pluginsDeps = (plugins) ? map(plugins, plugin => `babel-plugin-${plugin}`) : []
@@ -65,13 +65,13 @@ export function niftBabel ({presets = [], plugins = [], buildScript = 'build'}) 
   }
 }
 
-export function niftAuthor (author) {
+export function tentAuthor (author) {
   return function () {
     return { author }
   }
 }
 
-export function niftPostinstall (postinstall) {
+export function tentPostinstall (postinstall) {
   return function () {
     return {
       scripts: {
@@ -81,7 +81,7 @@ export function niftPostinstall (postinstall) {
   }
 }
 
-export function niftPrepublish (prepublish) {
+export function tentPrepublish (prepublish) {
   return function () {
     return {
       scripts: {
@@ -91,7 +91,7 @@ export function niftPrepublish (prepublish) {
   }
 }
 
-export function niftMain () {
+export function tentMain () {
   return function () {
     return {
       main: this.parsedPath.base
@@ -120,10 +120,10 @@ export async function buildPackage(file) {
   }
 
   let middleware = [
-    niftName(),
-    niftVersion(),
-    niftDeps(),
-    niftMain(),
+    tentName(),
+    tentVersion(),
+    tentDeps(),
+    tentMain(),
   ]
 
   standard.package = {}
