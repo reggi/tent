@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import 'babel-polyfill'
+// import 'babel-polyfill'
 import { join } from 'path'
 import yargs from 'yargs'
 import { buildPackage, buildModule, getGist } from './index'
@@ -39,7 +39,7 @@ yargs
     let temp = argv.temp
     return getGist(url, location, temp)
       .then(({files}) => {
-        return Promise.map(files, file => {
+        return Promise.map(files, ({file}) => {
           return buildModule(file, location, temp)
             .then(({location}) => execAsync(`cd ${location} && npm install && npm publish`))
         })
