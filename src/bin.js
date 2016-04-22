@@ -17,7 +17,7 @@ const tentpostpublish = `npm run tentpostpublish &> /dev/null || :`
 const npminstall = `npm install`
 const npmpublish = `npm publish`
 const install = [tentprenpminstall, npminstall, tentpostnpminstall].join(' && ')
-const publish = [tentprepublish, npminstall, tentpostpublish].join(' && ')
+const publish = [tentprepublish, npmpublish, tentpostpublish].join(' && ')
 const installpublish = [install, publish].join(' && ')
 
 yargs
