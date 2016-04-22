@@ -60,7 +60,8 @@ export function tentBabel ({presets = [], plugins = [], buildScript = 'build'}) 
       'main': outgoingFile,
       'jsnext:main': incomingFile,
       "scripts": {
-        [buildScript]: `mkdirp lib && mkdirp src && mv ${this.parsedPath.base} ${incomingFile} && babel ${incomingFile} --out-file ${outgoingFile}`
+        [buildScript]: `mkdirp lib && mkdirp src && mv ${this.parsedPath.base} ${incomingFile} && babel ${incomingFile} --out-file ${outgoingFile}`,
+        'tentpostnpminstall': 'npm run build'
       },
       devDependencies,
       babel: {
@@ -96,6 +97,16 @@ export function tentPrepublish (prepublish) {
     }
   }
 }
+
+// export function tentPostnpminstall (tentpostnpminstall) {
+//   return function () {
+//     return {
+//       scripts: {
+//         tentpostnpminstall
+//       }
+//     }
+//   }
+// }
 
 export function tentMain () {
   return function () {
