@@ -1,6 +1,6 @@
 {
   "name": "tent",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "./lib/index.js",
   "bin": "./lib/bin.js",
   "dependencies": {
@@ -8,6 +8,7 @@
     "acorn-umd": "^0.4.0",
     "babel-polyfill": "^6.7.4",
     "bluebird": "^3.3.5",
+    "debug": "^2.2.0",
     "deep-assign": "^2.0.0",
     "download": "^4.4.3",
     "enpeem": "^2.1.0",
