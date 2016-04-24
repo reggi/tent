@@ -34,7 +34,10 @@
     "build": "babel ./src --out-dir ./lib",
     "test": "mocha --compilers js:babel-core/register --recursive"
   },
-  "keywords": [],
+  "keywords": [
+    "transform-regenerator",
+    "syntax-async-functions"
+  ],
   "author": "",
   "license": "ISC",
   "esnext": "./src/index",

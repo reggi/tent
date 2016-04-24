@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// import 'babel-polyfill'
+import 'babel-polyfill'
 import { join } from 'path'
 import yargs from 'yargs'
 import { buildPackage, buildModule, getGist } from './index'
@@ -33,7 +33,7 @@ yargs
     let location = argv.location
     let temp = argv.temp
     return buildModule(file, location, temp)
-    .then(({location}) => execAsync(`cd ${location} && npm install`))
+    .then(({location}) => execAsync(`cd ${location} && ${npminstall}`))
     .catch(err => console.error(err.message + '\n' + err.stack))
   })
   .command('publish', 'Publish to npm', {}, function (argv) {

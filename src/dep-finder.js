@@ -8,11 +8,12 @@ import { extend } from 'lodash'
 Promise.promisifyAll(fs)
 const npmLatestAsync = Promise.promisify(npmLatest)
 
-const acornParseOptions = {sourceType: 'module', ecmaVersion: 6, allowHashBang: true}
+const acornParseOptions = {sourceType: 'module', ecmaVersion: 7, allowHashBang: true}
 const acornUmdOptions = {es6: true, amd: true, cjs: true}
 
 async function getDeps (file) {
   let content = await fs.readFileAsync(file, 'utf8')
+  console.log(content)
   let ast = acornParse(content, acornParseOptions)
   let deps = acornUmd(ast, acornUmdOptions)
   return deps.map(dep => dep.source.value)
@@ -56,5 +57,6 @@ export async function processDeps (deps) {
 
 export default async function main (file) {
   let deps = await getDeps(file)
+  if (!deps) return {}
   return await processDeps(deps)
 }

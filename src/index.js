@@ -222,12 +222,13 @@ export async function buildModule (file, location, temp) {
 export async function getComment (file) {
   debug(`getComment file: ${file}`)
   let contents = await fs.readFileAsync(file, 'utf8')
-  let comments = extract(contents)
+  let pattern = /(\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$)/gm
+  let comments = contents.match(pattern)
+  comments = comments.map(comment => comment.replace(/\/\*|\*\//g, ''))
   let id = 'tent:package'
-  let declarations = comments.filter(comment => comment.raw.match(id))
+  let declarations = comments.filter(comment => comment.match(id))
   if (declarations.length > 1) throw new Error('There can only be one tent:package declaration.')
-  let declaration = declarations[0]
-  let {raw} = declaration
+  let raw = declarations[0]
   let nameVersion = raw.match(new RegExp(`${id} (\\S+)`))[1]
   debug(`getComment nameVersion: ${nameVersion}`)
   let code = raw.replace(/\n/g,'').match(/from (.*)/)[1]
