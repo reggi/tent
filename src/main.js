@@ -1,4 +1,4 @@
-import { includes } from 'lodash'
+import { includes, chain } from 'lodash'
 import { parse as urlParse } from 'url'
 
 export function parseNpmModuleSytax (str) {
@@ -55,20 +55,47 @@ export function getComments(fileContent) {
 
 export function parseComments (comments) {
   let rootSyntax = ['tent', 'npm']
-  let buildSyntax = ['build']
-  let fromSyntax = ['from', 'foundation']
+  let buildSyntax = ['\\sbuild\\s', '\\s']
+  let fromSyntax = ['\\sfrom\\s', '\\sfoundation\\s']
+  let dualSyntax = ['\\sfrom\\s', '\\s']
   let introSyntax = [...fromSyntax, ...buildSyntax]
   let rootSyntaxPattern = rootSyntax.map(a => `${a}`).join('|')
-  let introSyntaxPattern = introSyntax.map(a => `\s${a}\s`).join('|')
+  let introSyntaxPattern = introSyntax.map(a => `${a}`).join('|')
+  let dualSyntaxPattern = dualSyntax.map(a => `${a}`).join('|')
   let firstPattern = new RegExp(`^${rootSyntaxPattern}`)
-  let secondPattern = new RegExp(`^${rootSyntaxPattern}(${introSyntaxPattern})(.+)`)
-  return comments
-    .filter(comment => comments.match(firstPattern))
+  let secondPattern = new RegExp(`^(${rootSyntaxPattern})(${introSyntaxPattern})(.+)`)
+  let thirdPattern = new RegExp(`^(\\S+)(${dualSyntaxPattern})(.+)$`)
+
+  let result = chain(comments)
+    .filter(comment => comment.match(firstPattern))
     .map(comment => {
-      let matches = comments.match(secondPattern)
-      return {
-        'key': (matches[2] === '') ? 'dual' : matches[2].trim(),
-        'value': matches[3]
-      }
+      let matches = comment.match(secondPattern)
+      let key
+      if (matches[2] === '') key = 'dual'
+      if (matches[2] === ' ') key = 'build'
+      if (!key) key = matches[2].trim()
+      if (key == 'from') key = 'foundation'
+      return {[key]: matches[3]}
     })
+    .map(comment => {
+      if (comment.dual) {
+        let matches = comment.dual.value.match(thirdPattern)
+        comment.build = matches[1]
+        comment.foundation = matches[3]
+      }
+      return comment
+    })
+    .value()
+
+  console.log(result)
+  return result
+  // return comments
+    // .filter(comment => comment.match(firstPattern))
+    // .map(comment => {
+      // let matches = comment.match(secondPattern)
+      // console.log(comment)
+      // let key = (matches[2] === '') ? 'dual' : matches[2].trim()
+      // return {[key]: matches[3]}
+    // })
+
 }
