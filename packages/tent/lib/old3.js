@@ -5,10 +5,26 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.processDeps = exports.getNpmVersions = undefined;
 
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
 var getDeps = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(file) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(file) {
     var content, ast, deps;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -32,17 +48,16 @@ var getDeps = function () {
       }
     }, _callee, this);
   }));
-
   return function getDeps(_x) {
     return ref.apply(this, arguments);
   };
 }();
 
 var getNpmVersion = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(dep) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(dep) {
     var _ref, name, version;
 
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
@@ -68,15 +83,14 @@ var getNpmVersion = function () {
       }
     }, _callee2, this, [[0, 9]]);
   }));
-
   return function getNpmVersion(_x2) {
     return ref.apply(this, arguments);
   };
 }();
 
 var getNpmVersions = exports.getNpmVersions = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(deps) {
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(deps) {
+    return _regenerator2.default.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
@@ -93,16 +107,15 @@ var getNpmVersions = exports.getNpmVersions = function () {
       }
     }, _callee3, this);
   }));
-
   return function getNpmVersions(_x3) {
     return ref.apply(this, arguments);
   };
 }();
 
 var processDeps = exports.processDeps = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(deps) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(deps) {
     var getVersion, gotVersion, versionedDeps;
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+    return _regenerator2.default.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
@@ -127,7 +140,7 @@ var processDeps = exports.processDeps = function () {
           case 5:
             versionedDeps = _context4.sent;
 
-            deps = [].concat(_toConsumableArray(versionedDeps), _toConsumableArray(gotVersion));
+            deps = [].concat((0, _toConsumableArray3.default)(versionedDeps), (0, _toConsumableArray3.default)(gotVersion));
             deps = deps.filter(function (dep) {
               return !dep.name.match(/^.\.\/|^.\/|^\//);
             });
@@ -140,7 +153,6 @@ var processDeps = exports.processDeps = function () {
       }
     }, _callee4, this);
   }));
-
   return function processDeps(_x4) {
     return ref.apply(this, arguments);
   };
@@ -168,12 +180,6 @@ var _lodash = require('lodash');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new _bluebird2.default(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return _bluebird2.default.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
-
 _bluebird2.default.promisifyAll(_fs2.default);
 var npmLatestAsync = _bluebird2.default.promisify(_npmLatest2.default);
 
@@ -182,15 +188,15 @@ var acornUmdOptions = { es6: true, amd: true, cjs: true };
 
 function mapToDeps(deps) {
   deps = deps.map(function (dep) {
-    return _defineProperty({}, dep.name, dep.version);
+    return (0, _defineProperty3.default)({}, dep.name, dep.version);
   });
   return _lodash.extend.apply(null, deps);
 }
 
 exports.default = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(file) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(file) {
     var deps;
-    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+    return _regenerator2.default.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:

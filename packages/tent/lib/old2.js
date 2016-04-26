@@ -1,6 +1,24 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _objectDestructuringEmpty2 = require('babel-runtime/helpers/objectDestructuringEmpty');
+
+var _objectDestructuringEmpty3 = _interopRequireDefault(_objectDestructuringEmpty2);
+
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = require('babel-runtime/helpers/createClass');
+
+var _createClass3 = _interopRequireDefault(_createClass2);
 
 var _url = require('url');
 
@@ -24,12 +42,6 @@ var _bluebird2 = _interopRequireDefault(_bluebird);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _objectDestructuringEmpty(obj) { if (obj == null) throw new TypeError("Cannot destructure undefined"); }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new _bluebird2.default(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return _bluebird2.default.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 _bluebird2.default.promisifyAll(_jsfiddleApi2.default);
 
 var FROM_GIST = 'FROM_GIST';
@@ -41,8 +53,7 @@ var Tent = function () {
     var outDir = _ref$outDir === undefined ? './' : _ref$outDir;
     var _ref$temp = _ref.temp;
     var temp = _ref$temp === undefined ? false : _ref$temp;
-
-    _classCallCheck(this, Tent);
+    (0, _classCallCheck3.default)(this, Tent);
 
     this.cwd = process.cwd();
     this.tempOutDir = (0, _path.join)((0, _osTmpdir2.default)(), 'tent');
@@ -51,7 +62,7 @@ var Tent = function () {
     this.downloadDir = (0, _path.join)(this.tempOutDir, 'downloads');
   }
 
-  _createClass(Tent, [{
+  (0, _createClass3.default)(Tent, [{
     key: 'parseComments',
     value: function parseComments(tentFileComments) {}
   }, {
@@ -63,8 +74,8 @@ var Tent = function () {
   }, {
     key: 'buildPackageFromGist',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+        return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
@@ -84,8 +95,8 @@ var Tent = function () {
   }, {
     key: 'buildPackageFromFile',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+        return _regenerator2.default.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
@@ -105,13 +116,14 @@ var Tent = function () {
   }, {
     key: 'buildPackageFromData',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(_ref2) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(_ref2) {
         var data;
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        return _regenerator2.default.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _objectDestructuringEmpty(_ref2);
+                (0, _objectDestructuringEmpty3.default)(_ref2);
+
 
                 // the idea is the within here we provide access to everything plugins would
                 // need to build the file their own way, in my case I'd like to create a plugin
@@ -151,9 +163,9 @@ var Tent = function () {
   }, {
     key: 'buildFromGist',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(gistUrl) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(gistUrl) {
         var gistData;
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        return _regenerator2.default.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
@@ -177,9 +189,9 @@ var Tent = function () {
   }, {
     key: 'buildFromFile',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(filePath) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(filePath) {
         var fileContent;
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        return _regenerator2.default.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
@@ -207,11 +219,11 @@ var Tent = function () {
   }, {
     key: 'downloadFile',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee6(_ref3) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(_ref3) {
         var path = _ref3.path;
         var url = _ref3.url;
         var file;
-        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+        return _regenerator2.default.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
@@ -235,8 +247,8 @@ var Tent = function () {
   }, {
     key: 'downloadFiles',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee7(files) {
-        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(files) {
+        return _regenerator2.default.wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
@@ -268,8 +280,8 @@ var Tent = function () {
   }, {
     key: 'getFileContents',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee8(filePath) {
-        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(filePath) {
+        return _regenerator2.default.wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
@@ -330,11 +342,11 @@ var Tent = function () {
   }, {
     key: 'getGistFromData',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee9(_ref4) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9(_ref4) {
         var username = _ref4.username;
         var id = _ref4.id;
         var gist, gistAsync;
-        return regeneratorRuntime.wrap(function _callee9$(_context9) {
+        return _regenerator2.default.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
@@ -363,10 +375,10 @@ var Tent = function () {
   }, {
     key: 'getGistFromUrl',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee10(url) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee10(url) {
         var _parseGistUrl, username, id;
 
-        return regeneratorRuntime.wrap(function _callee10$(_context10) {
+        return _regenerator2.default.wrap(function _callee10$(_context10) {
           while (1) {
             switch (_context10.prev = _context10.next) {
               case 0:
@@ -396,9 +408,9 @@ var Tent = function () {
   }, {
     key: 'getJsbinJavascript',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee11(id) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee11(id) {
         var data;
-        return regeneratorRuntime.wrap(function _callee11$(_context11) {
+        return _regenerator2.default.wrap(function _callee11$(_context11) {
           while (1) {
             switch (_context11.prev = _context11.next) {
               case 0:
@@ -426,9 +438,9 @@ var Tent = function () {
   }, {
     key: 'getJsfiddleJavascript',
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee12(id) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee12(id) {
         var data;
-        return regeneratorRuntime.wrap(function _callee12$(_context12) {
+        return _regenerator2.default.wrap(function _callee12$(_context12) {
           while (1) {
             switch (_context12.prev = _context12.next) {
               case 0:
@@ -454,6 +466,5 @@ var Tent = function () {
       return getJsfiddleJavascript;
     }()
   }]);
-
   return Tent;
 }();

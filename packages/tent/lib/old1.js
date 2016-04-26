@@ -5,13 +5,35 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.resolveModules = exports.getComment = exports.buildModule = exports.getGist = exports.download = exports.buildPackage = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends2 = require('babel-runtime/helpers/extends');
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var buildPackage = exports.buildPackage = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(file) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(file) {
     var parsedPath, _ref2, buildDependencies, nameVersion, info, standard, middleware, definitionMiddleware, pkg, jsonPkg;
 
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+    return _regenerator2.default.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
@@ -28,10 +50,10 @@ var buildPackage = exports.buildPackage = function () {
 
 
             debug('buildPackage nameVersion: ' + nameVersion);
-            debug('buildPackage buildDependencies: ' + JSON.stringify(buildDependencies));
+            debug('buildPackage buildDependencies: ' + (0, _stringify2.default)(buildDependencies));
 
             info = resolveId(nameVersion);
-            standard = _extends({}, info, {
+            standard = (0, _extends3.default)({}, info, {
               file: file,
               parsedPath: parsedPath,
               buildDependencies: buildDependencies,
@@ -62,7 +84,7 @@ var buildPackage = exports.buildPackage = function () {
 
           case 20:
             pkg = _context3.sent;
-            jsonPkg = JSON.stringify(pkg, null, 2);
+            jsonPkg = (0, _stringify2.default)(pkg, null, 2);
             return _context3.abrupt('return', { pkg: pkg, standard: standard, jsonPkg: jsonPkg });
 
           case 23:
@@ -72,15 +94,14 @@ var buildPackage = exports.buildPackage = function () {
       }
     }, _callee3, this);
   }));
-
   return function buildPackage(_x) {
     return ref.apply(this, arguments);
   };
 }();
 
 var download = exports.download = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(dataSet) {
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(dataSet) {
+    return _regenerator2.default.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
@@ -102,16 +123,15 @@ var download = exports.download = function () {
       }
     }, _callee4, this);
   }));
-
   return function download(_x2) {
     return ref.apply(this, arguments);
   };
 }();
 
 var getGist = exports.getGist = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee5(gistUrl, location, temp) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(gistUrl, location, temp) {
     var parsedUrl, pieces, username, id, gist, gistAsync, gistData, files, exportfiles, results;
-    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+    return _regenerator2.default.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
@@ -159,16 +179,15 @@ var getGist = exports.getGist = function () {
       }
     }, _callee5, this);
   }));
-
   return function getGist(_x3, _x4, _x5) {
     return ref.apply(this, arguments);
   };
 }();
 
 var buildModule = exports.buildModule = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee6(file, location, temp) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(file, location, temp) {
     var result, cleanPkg, dirPath, pkgPath, mainFile;
-    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+    return _regenerator2.default.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
@@ -183,7 +202,7 @@ var buildModule = exports.buildModule = function () {
             location = temp ? (0, _osTmpdir2.default)() : (0, _path.join)(process.cwd(), location);
             location = (0, _path.join)(location, result.standard.name);
             debug('buildModule file: ' + location);
-            cleanPkg = JSON.stringify(result.pkg, null, 2);
+            cleanPkg = (0, _stringify2.default)(result.pkg, null, 2);
             dirPath = (0, _path.join)(location);
             _context6.next = 12;
             return _fsExtra2.default.ensureDirAsync(dirPath);
@@ -212,7 +231,6 @@ var buildModule = exports.buildModule = function () {
       }
     }, _callee6, this);
   }));
-
   return function buildModule(_x6, _x7, _x8) {
     return ref.apply(this, arguments);
   };
@@ -222,9 +240,9 @@ var buildModule = exports.buildModule = function () {
 // await execAsync(`cd ${location} && npm install`)
 
 var getComment = exports.getComment = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee7(file) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(file) {
     var contents, pattern, comments, id, declarations, raw, nameVersion, code, buildDependencies;
-    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+    return _regenerator2.default.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
@@ -270,24 +288,23 @@ var getComment = exports.getComment = function () {
       }
     }, _callee7, this);
   }));
-
   return function getComment(_x9) {
     return ref.apply(this, arguments);
   };
 }();
 
 var resolveModules = exports.resolveModules = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee8(pkgs) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(pkgs) {
     var tempDir, detail, dependencies, components;
-    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+    return _regenerator2.default.wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
-            debug('resolveModules pkgs ' + JSON.stringify(pkgs));
+            debug('resolveModules pkgs ' + (0, _stringify2.default)(pkgs));
             tempDir = (0, _path.join)((0, _osTmpdir2.default)(), 'pit-of-despair');
             detail = (0, _lodash.map)(pkgs, function (value, key) {
               var info = resolveId(key);
-              return _extends({}, info, {
+              return (0, _extends3.default)({}, info, {
                 originalName: key,
                 arguments: value,
                 path: (0, _path.join)(tempDir, 'node_modules', info.name)
@@ -299,7 +316,7 @@ var resolveModules = exports.resolveModules = function () {
               return name + '@' + version;
             }));
 
-            debug('resolveModules dependencies ' + JSON.stringify(dependencies));
+            debug('resolveModules dependencies ' + (0, _stringify2.default)(dependencies));
             _context8.next = 7;
             return _fsExtra2.default.ensureDirAsync(tempDir);
 
@@ -324,7 +341,6 @@ var resolveModules = exports.resolveModules = function () {
       }
     }, _callee8, this);
   }));
-
   return function resolveModules(_x10) {
     return ref.apply(this, arguments);
   };
@@ -394,20 +410,14 @@ var _enpeem2 = _interopRequireDefault(_enpeem);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new _bluebird2.default(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return _bluebird2.default.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
-
 var debug = (0, _debug2.default)('tent');
 
 _bluebird2.default.promisifyAll(_fsExtra2.default);
 
 function tentDeps() {
-  return _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+  return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
     var dependencies;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -451,11 +461,11 @@ function tentBabel(_ref) {
   var _ref$buildScript = _ref.buildScript;
   var buildScript = _ref$buildScript === undefined ? 'build' : _ref$buildScript;
 
-  return _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+  return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
     var _scripts;
 
     var presetsDeps, pluginsDeps, devDependencies, incomingFile, outgoingFile;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
@@ -465,7 +475,7 @@ function tentBabel(_ref) {
             pluginsDeps = plugins ? (0, _lodash.map)(plugins, function (plugin) {
               return 'babel-plugin-' + plugin;
             }) : [];
-            devDependencies = ['babel-cli'].concat(_toConsumableArray(pluginsDeps), _toConsumableArray(presetsDeps), ['mkdirp']);
+            devDependencies = ['babel-cli'].concat((0, _toConsumableArray3.default)(pluginsDeps), (0, _toConsumableArray3.default)(presetsDeps), ['mkdirp']);
             _context2.next = 5;
             return this.processDeps(devDependencies);
 
@@ -476,7 +486,7 @@ function tentBabel(_ref) {
             return _context2.abrupt('return', {
               'main': outgoingFile,
               'jsnext:main': incomingFile,
-              "scripts": (_scripts = {}, _defineProperty(_scripts, buildScript, 'mkdirp lib && mkdirp src && mv ' + this.parsedPath.base + ' ' + incomingFile + ' && babel ' + incomingFile + ' --out-file ' + outgoingFile), _defineProperty(_scripts, 'tentpostnpminstall', 'npm run build'), _scripts),
+              "scripts": (_scripts = {}, (0, _defineProperty3.default)(_scripts, buildScript, 'mkdirp lib && mkdirp src && mv ' + this.parsedPath.base + ' ' + incomingFile + ' && babel ' + incomingFile + ' --out-file ' + outgoingFile), (0, _defineProperty3.default)(_scripts, 'tentpostnpminstall', 'npm run build'), _scripts),
               devDependencies: devDependencies,
               babel: {
                 presets: presets,
