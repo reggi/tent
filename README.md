@@ -19,14 +19,11 @@ There's several barriers preventing you from getting this simple line of code up
 Here's the solution:
 
 ```js
-import { tentBabel, tentPostinstall } from 'tent'
-export const def = ['reggi-left-pad@1.0.0', [
-  tentBabel({presets: ['es2015'], 'buildScript': "build"}), tentPostinstall('npm run build')
-]]
+// tent build example@1.0.0 from tent-es-2015@1.0.3
 export default (v, n, c = '0') => String(v).length >= n ? '' + v : (String(c).repeat(n) + v).slice(-n)
 ```
 
-By adding a couple of lines to your file you have everything you need to get this small snippet up and running on npm.
+By adding a `tent` comment in your file, you have everything you need to get this small snippet up and running on npm.
 
 You can even just save your most commonly used `tent` settings in its own module.
 
@@ -38,14 +35,6 @@ export default [
   tentBabel({presets: ['es2015'], 'buildScript': "build"}),
   tentPostinstall('npm run build')
 ]
-```
-
-And pull them in like this.
-
-```js
-import myTent from 'thomas-reggis-tent'
-export const def = ['reggi-left-pad@1.0.0', myTent()]
-export default (v, n, c = '0') => String(v).length >= n ? '' + v : (String(c).repeat(n) + v).slice(-n)
 ```
 
 # Spec
