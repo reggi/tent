@@ -223,7 +223,7 @@ var buildModule = exports.buildModule = function () {
 
 var getComment = exports.getComment = function () {
   var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee7(file) {
-    var contents, comments, id, declarations, declaration, raw, nameVersion, code, buildDependencies;
+    var contents, pattern, comments, id, declarations, raw, nameVersion, code, buildDependencies;
     return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
@@ -234,22 +234,26 @@ var getComment = exports.getComment = function () {
 
           case 3:
             contents = _context7.sent;
-            comments = (0, _extractComments2.default)(contents);
+            pattern = /(\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$)/gm;
+            comments = contents.match(pattern);
+
+            comments = comments.map(function (comment) {
+              return comment.replace(/\/\*|\*\//g, '');
+            });
             id = 'tent:package';
             declarations = comments.filter(function (comment) {
-              return comment.raw.match(id);
+              return comment.match(id);
             });
 
             if (!(declarations.length > 1)) {
-              _context7.next = 9;
+              _context7.next = 11;
               break;
             }
 
             throw new Error('There can only be one tent:package declaration.');
 
-          case 9:
-            declaration = declarations[0];
-            raw = declaration.raw;
+          case 11:
+            raw = declarations[0];
             nameVersion = raw.match(new RegExp(id + ' (\\S+)'))[1];
 
             debug('getComment nameVersion: ' + nameVersion);
@@ -259,7 +263,7 @@ var getComment = exports.getComment = function () {
             buildDependencies = JSON.parse(code);
             return _context7.abrupt('return', { buildDependencies: buildDependencies, nameVersion: nameVersion });
 
-          case 17:
+          case 18:
           case 'end':
             return _context7.stop();
         }

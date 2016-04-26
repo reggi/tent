@@ -11,7 +11,6 @@ const FROM_GIST = 'FROM_GIST'
 const FROM_FILE = 'FROM_FILE'
 
 class Tent {
-  buildLocation, downloadLocation
   constructor({outDir = './', temp = false}){
     this.cwd = process.cwd()
     this.tempOutDir = pathJoin(osTmpDir(), 'tent')

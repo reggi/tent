@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
+require('babel-polyfill');
+
 var _path = require('path');
 
 var _yargs = require('yargs');
@@ -21,9 +23,6 @@ var _child_process = require('child_process');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import 'babel-polyfill'
-
-
 var execAsync = _bluebird2.default.promisifyAll(_child_process.exec);
 
 var tentprenpminstall = 'npm run tentprenpminstall &> /dev/null || :';
@@ -34,7 +33,7 @@ var tentpostpublish = 'npm run tentpostpublish &> /dev/null || :';
 var npminstall = 'npm install';
 var npmpublish = 'npm publish';
 var install = [tentprenpminstall, npminstall, tentpostnpminstall].join(' && ');
-var publish = [tentprepublish, npminstall, tentpostpublish].join(' && ');
+var publish = [tentprepublish, npmpublish, tentpostpublish].join(' && ');
 var installpublish = [install, publish].join(' && ');
 
 _yargs2.default.usage('$0 <cmd> [args]').command('build-package', 'Builds the package.json file', {}, function (argv) {
@@ -51,7 +50,7 @@ _yargs2.default.usage('$0 <cmd> [args]').command('build-package', 'Builds the pa
   var temp = argv.temp;
   return (0, _index.buildModule)(file, location, temp).then(function (_ref2) {
     var location = _ref2.location;
-    return execAsync('cd ' + location + ' && npm install');
+    return execAsync('cd ' + location + ' && ' + npminstall);
   }).catch(function (err) {
     return console.error(err.message + '\n' + err.stack);
   });

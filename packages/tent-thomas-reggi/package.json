@@ -1,0 +1,16 @@
+{
+  "name": "tent-thomas-reggi",
+  "version": "1.0.3",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tent-babel": "^1.0.1",
+    "tent-babel-deps": "^1.0.3"
+  }
+}

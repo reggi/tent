@@ -1,0 +1,8 @@
+{
+  "localDependencies": {
+    "lodash@4.11.1": "lodash"
+  },
+  "dependencies": {
+    "lodash": "^4.11.1"
+  }
+}
