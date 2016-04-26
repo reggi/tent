@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Tent = exports.buildModule = exports.buildPackage = exports.installNpmModules = exports.getFileContents = undefined;
+exports.buildModule = exports.buildPackage = exports.installNpmModules = exports.getFileContents = undefined;
 
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
@@ -400,8 +400,10 @@ var execAsync = _bluebird2.default.promisifyAll(_child_process.exec);
 // const tentprebuild = `npm run tentprebuild &> /dev/null || :`
 // const tentpostbuild = `npm run tentpostbuild &> /dev/null || :`
 
-var Tent = exports.Tent = function () {
-  function Tent(_ref) {
+var Tent = function () {
+  function Tent() {
+    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
     var _ref$outDir = _ref.outDir;
     var outDir = _ref$outDir === undefined ? './' : _ref$outDir;
     var _ref$temp = _ref.temp;
@@ -462,7 +464,7 @@ var Tent = exports.Tent = function () {
         }, _callee6, this);
       }));
 
-      function buildPackage(_x9) {
+      function buildPackage(_x10) {
         return ref.apply(this, arguments);
       }
 
@@ -490,7 +492,7 @@ var Tent = exports.Tent = function () {
         }, _callee7, this);
       }));
 
-      function buildModule(_x10) {
+      function buildModule(_x11) {
         return ref.apply(this, arguments);
       }
 
@@ -499,7 +501,7 @@ var Tent = exports.Tent = function () {
   }, {
     key: 'runBuildModule',
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(action) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(file, action) {
         var cd;
         return _regenerator2.default.wrap(function _callee8$(_context8) {
           while (1) {
@@ -507,7 +509,7 @@ var Tent = exports.Tent = function () {
               case 0:
                 cd = 'cd ' + this.outDir;
                 _context8.next = 3;
-                return this.buildModule();
+                return this.buildModule(file);
 
               case 3:
                 if (!action) {
@@ -526,20 +528,41 @@ var Tent = exports.Tent = function () {
         }, _callee8, this);
       }));
 
-      function runBuildModule(_x11) {
+      function runBuildModule(_x12, _x13) {
         return ref.apply(this, arguments);
       }
 
       return runBuildModule;
     }()
   }, {
-    key: 'execAction',
+    key: 'runBuildGist',
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9(act) {
-        var action;
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9(url, action) {
         return _regenerator2.default.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
+              case 0:
+              case 'end':
+                return _context9.stop();
+            }
+          }
+        }, _callee9, this);
+      }));
+
+      function runBuildGist(_x14, _x15) {
+        return ref.apply(this, arguments);
+      }
+
+      return runBuildGist;
+    }()
+  }, {
+    key: 'execAction',
+    value: function () {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee10(act) {
+        var action;
+        return _regenerator2.default.wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
               case 0:
                 action = {};
 
@@ -552,21 +575,21 @@ var Tent = exports.Tent = function () {
                 action.install = [action.tentpreinstall, action.npminstall, action.tentpostinstall].join(' && ');
                 action.publish = [action.tentprepublish, action.npmpublish, action.tentpostpublish].join(' && ');
                 action.installpublish = [action.install, action.publish].join(' && ');
-                _context9.next = 12;
+                _context10.next = 12;
                 return execAsync([cd, action[act]]);
 
               case 12:
-                return _context9.abrupt('return', _context9.sent);
+                return _context10.abrupt('return', _context10.sent);
 
               case 13:
               case 'end':
-                return _context9.stop();
+                return _context10.stop();
             }
           }
-        }, _callee9, this);
+        }, _callee10, this);
       }));
 
-      function execAction(_x12) {
+      function execAction(_x16) {
         return ref.apply(this, arguments);
       }
 
@@ -575,3 +598,5 @@ var Tent = exports.Tent = function () {
   }]);
   return Tent;
 }();
+
+exports.default = Tent;

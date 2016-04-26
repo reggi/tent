@@ -1,6 +1,6 @@
 {
   "name": "tent",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "main": "./lib/index.js",
   "bin": "./lib/bin.js",
   "dependencies": {
@@ -22,6 +22,7 @@
     "npm": "^3.8.7",
     "npm-latest": "^1.0.2",
     "os-tmpdir": "^1.0.1",
+    "spawn-npm-install": "^1.2.0",
     "yargs": "^4.6.0"
   },
   "devDependencies": {

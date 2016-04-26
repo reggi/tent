@@ -6,8 +6,10 @@ import { parse as urlParse } from 'url'
 import fs from 'fs-extra'
 import npmInstall from 'spawn-npm-install'
 import osTmpDir from 'os-tmpdir'
+import { exec } from 'child_process'
 
-let npmInstallAsync = Promise.promisify(npmInstall)
+const execAsync = Promise.promisifyAll(exec)
+const npmInstallAsync = Promise.promisify(npmInstall)
 Promise.promisifyAll(fs)
 
 export function parseNpmModuleSytax (str) {
@@ -219,15 +221,8 @@ export async function buildModule (file, tmp) {
   return results
 }
 
-import { exec } from 'child_process'
-
-const execAsync = Promise.promisifyAll(exec)
-
-// const tentprebuild = `npm run tentprebuild &> /dev/null || :`
-// const tentpostbuild = `npm run tentpostbuild &> /dev/null || :`
-
-export class Tent {
-  constructor({outDir = './', temp = true}){
+export default class Tent {
+  constructor({outDir = './', temp = true} = {}){
     this.cwd = process.cwd()
     this.tempOutDir = pathJoin(osTmpDir(), 'npm-tent')
     this.defaultOutDir = pathJoin(this.cwd, outDir)
@@ -244,10 +239,13 @@ export class Tent {
   async buildModule(file) {
     return await buildModule(file, this.outDir)
   }
-  async runBuildModule (action) {
+  async runBuildModule (file, action) {
     let cd = `cd ${this.outDir}`
-    await this.buildModule()
+    await this.buildModule(file)
     if (action) await execAsync([cd, action])
+  }
+  async runBuildGist(url, action) {
+
   }
   async execAction (act) {
     let action = {}
