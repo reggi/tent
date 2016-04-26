@@ -19,10 +19,7 @@ There's several barriers preventing you from getting this simple line of code up
 Here's the solution:
 
 ```js
-import { tentBabel, tentPostinstall } from 'tent'
-export const def = ['reggi-left-pad@1.0.0', [
-  tentBabel({presets: ['es2015'], 'buildScript': "build"}), tentPostinstall('npm run build')
-]]
+// npm build example@1.0.0 from tent-es-2015@1.0.3
 export default (v, n, c = '0') => String(v).length >= n ? '' + v : (String(c).repeat(n) + v).slice(-n)
 ```
 
