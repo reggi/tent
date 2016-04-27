@@ -51,7 +51,7 @@ function mapModulesToLocalDeps (modules) {
 
 export default function () {
   return async (tent) => {
-    let code = tent.file
+    let code = tent.fileContent
     let modules = babylonModuleDefinitions({code})
     let ogModules = parseModuleSyntax(modules)
     modules = await getModuleVersions(ogModules)
@@ -63,7 +63,7 @@ export default function () {
     let localDependencies = mapModulesToLocalDeps(ogModules)
 
     let script = []
-    if (get(tent, 'package.script.tentpostinstall')) script.push(tent.package.script.tentpostinstall)
+    if (get(tent, 'pkg.script.tentpostinstall')) script.push(tent.pkg.script.tentpostinstall)
     script.push(`tent-module-assign install`)
     script.tentpostinstall = script.join(' && ')
 

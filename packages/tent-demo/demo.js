@@ -1,4 +1,4 @@
-// tent build thomas-reggi-bio@1.0.0 from tent-thomas-reggi@1.0.2
+// tent build thomas-reggi-bio@1.0.0 from tent-thomas-reggi@1.0.7
 import _ from 'lodash@3.0.0'
 import Promise from 'bluebird'
 

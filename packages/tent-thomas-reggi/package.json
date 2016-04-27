@@ -1,6 +1,6 @@
 {
   "name": "tent-thomas-reggi",
-  "version": "1.0.3",
+  "version": "1.0.7",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "tent-babel": "^1.0.1",
-    "tent-babel-deps": "^1.0.3"
+    "tent-babel": "^1.0.5",
+    "tent-babel-deps": "^1.0.6"
   }
 }

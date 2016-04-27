@@ -1,5 +1,5 @@
-var tentBabelDeps = require('tent-babel-deps')
-var tentBabel = require('tent-babel')
+var tentBabelDeps = require('tent-babel-deps').default
+var tentBabel = require('tent-babel').default
 
 function tentAnything (key, value) {
   return function () {
@@ -11,6 +11,6 @@ function tentAnything (key, value) {
 
 module.exports = [
   tentAnything('author', 'Thomas Reggi'),
-  tentBabel(),
+  tentBabel({'presets': ['es2015']}),
   tentBabelDeps()
 ]

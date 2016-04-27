@@ -21,7 +21,7 @@ exports.default = function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            code = tent.file;
+            code = tent.fileContent;
             modules = (0, _babylonModuleDefinitons2.default)({ code: code });
             ogModules = parseModuleSyntax(modules);
             _context2.next = 5;
@@ -45,7 +45,7 @@ exports.default = function () {
             localDependencies = mapModulesToLocalDeps(ogModules);
             script = [];
 
-            if ((0, _lodash.get)(tent, 'package.script.tentpostinstall')) script.push(tent.package.script.tentpostinstall);
+            if ((0, _lodash.get)(tent, 'pkg.script.tentpostinstall')) script.push(tent.pkg.script.tentpostinstall);
             script.push('tent-module-assign install');
             script.tentpostinstall = script.join(' && ');
 

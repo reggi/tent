@@ -1,6 +1,6 @@
 {
   "name": "tent-babel-deps",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "description": "",
   "main": "./lib/index",
   "scripts": {
@@ -31,6 +31,7 @@
   },
   "esnext": "./src/index",
   "dependencies": {
+    "babel-runtime": "^6.6.1",
     "babylon-module-definitons": "^1.0.0",
     "bluebird": "^3.3.5",
     "lodash": "^4.11.1",

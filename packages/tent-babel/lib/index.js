@@ -59,7 +59,9 @@ function getDeps(m) {
   }, null, this);
 }
 
-function tentBabel(_ref) {
+function tentBabel() {
+  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
   var _ref$presets = _ref.presets;
   var presets = _ref$presets === undefined ? [] : _ref$presets;
   var _ref$plugins = _ref.plugins;
@@ -76,21 +78,17 @@ function tentBabel(_ref) {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return _regenerator2.default.awrap(_fsExtra2.default.ensureDirAsync(tent.modulePath));
+            return _regenerator2.default.awrap(_fsExtra2.default.ensureDirAsync(tent.buildPath));
 
           case 2:
             _context2.next = 4;
-            return _regenerator2.default.awrap(_fsExtra2.default.ensureDirAsync((0, _path.join)(tent.modulePath, 'src')));
+            return _regenerator2.default.awrap(_bluebird2.default.all([_fsExtra2.default.ensureDirAsync((0, _path.join)(tent.buildPath, 'src')), _fsExtra2.default.ensureDirAsync((0, _path.join)(tent.buildPath, 'lib'))]));
 
           case 4:
             _context2.next = 6;
-            return _regenerator2.default.awrap(_fsExtra2.default.ensureDirAsync((0, _path.join)(tent.modulePath, 'lib')));
+            return _regenerator2.default.awrap(_fsExtra2.default.writeFileAsync((0, _path.join)(tent.buildPath, '/src/index.js'), tent.fileContent));
 
           case 6:
-            _context2.next = 8;
-            return _regenerator2.default.awrap(_fsExtra2.default.writeFileAsync((0, _path.join)(tent.modulePath, '/src/index.js'), tent.file));
-
-          case 8:
             presetsDeps = presets ? (0, _lodash.map)(presets, function (preset) {
               return 'babel-preset-' + preset;
             }) : [];
@@ -98,16 +96,16 @@ function tentBabel(_ref) {
               return 'babel-plugin-' + plugin;
             }) : [];
             devDependencies = ['babel-cli'].concat((0, _toConsumableArray3.default)(pluginsDeps), (0, _toConsumableArray3.default)(presetsDeps));
-            _context2.next = 13;
+            _context2.next = 11;
             return _regenerator2.default.awrap(getDeps(devDependencies));
 
-          case 13:
+          case 11:
             devDependencies = _context2.sent;
-            incomingFile = (0, _path.join)('src', this.parsedPath.base);
-            outgoingFile = (0, _path.join)('lib', this.parsedPath.base);
+            incomingFile = (0, _path.join)('src', (0, _path.parse)(tent.filePath).base);
+            outgoingFile = (0, _path.join)('lib', (0, _path.parse)(tent.filePath).base);
             script = [];
 
-            if ((0, _lodash.get)(tent, 'package.script.tentpostinstall')) script.push(tent.package.script.tentpostinstall);
+            if ((0, _lodash.get)(tent, 'pkg.script.tentpostinstall')) script.push(tent.pkg.script.tentpostinstall);
             script.push('npm run ' + buildScript);
 
             return _context2.abrupt('return', {
@@ -121,7 +119,7 @@ function tentBabel(_ref) {
               }
             });
 
-          case 20:
+          case 18:
           case 'end':
             return _context2.stop();
         }

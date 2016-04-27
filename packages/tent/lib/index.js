@@ -96,7 +96,11 @@ var installNpmModules = exports.installNpmModules = function () {
 }();
 
 var _buildPackage = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(file, tmp) {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(_ref) {
+    var fileContent = _ref.fileContent;
+    var filePath = _ref.filePath;
+    var outDir = _ref.outDir;
+    var tmpDir = _ref.tmpDir;
     var results;
     return _regenerator2.default.wrap(function _callee3$(_context3) {
       while (1) {
@@ -104,79 +108,84 @@ var _buildPackage = function () {
           case 0:
             results = {};
 
-            results.tmp = tmp;
-            results.file = file;
-            results.comments = getComments(file);
+            results.fileContent = fileContent;
+            results.filePath = filePath;
+            results.outDir = outDir;
+            results.tmpDir = tmpDir;
+            results.comments = getComments(fileContent);
             results.syntax = parseCommentsSyntax(results.comments);
             results.values = resolveValues(results.syntax);
             results.build = results.values.build ? parseNpmModuleSytax(results.values.build) : false;
+            results.buildPath = results.build ? (0, _path.join)(this.outDir, results.build.module) : false;
             results.foundation = processFoundation(results.values.foundation);
             results.installModules = results.foundation.map(function (item) {
               return item.download;
             });
-            _context3.next = 11;
-            return installNpmModules(results.installModules, tmp);
-
-          case 11:
-            results.middleware = getMiddleware(results.foundation, tmp);
             _context3.next = 14;
-            return buildPackageJson(results.middleware, results);
+            return installNpmModules(results.installModules, tmpDir);
 
           case 14:
+            results.middleware = getMiddleware(results.foundation, tmpDir);
+            _context3.next = 17;
+            return buildPackageJson(results.middleware, results);
+
+          case 17:
             results.pkg = _context3.sent;
             return _context3.abrupt('return', results);
 
-          case 16:
+          case 19:
           case 'end':
             return _context3.stop();
         }
       }
     }, _callee3, this);
   }));
-  return function _buildPackage(_x5, _x6) {
+  return function _buildPackage(_x5) {
     return ref.apply(this, arguments);
   };
 }();
 
 var _buildModule = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(file, tmp) {
-    var results, pkg, build;
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(_ref2) {
+    var fileContent = _ref2.fileContent;
+    var filePath = _ref2.filePath;
+    var outDir = _ref2.outDir;
+    var tmpDir = _ref2.tmpDir;
+    var results, pkg;
     return _regenerator2.default.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
             _context4.next = 2;
-            return _buildPackage(file, tmp);
+            return _buildPackage(fileContent, tmp);
 
           case 2:
             results = _context4.sent;
             pkg = results.pkg;
-            build = results.build;
 
             if (!build) {
-              _context4.next = 11;
+              _context4.next = 9;
               break;
             }
 
-            results.modulePath = (0, _path.join)(tmp, build.module);
+            _context4.next = 7;
+            return _fsExtra2.default.ensureDirAsync(results.buildPath);
+
+          case 7:
             _context4.next = 9;
-            return _fsExtra2.default.ensureDirAsync(results.modulePath);
+            return _fsExtra2.default.writeFileAsync((0, _path.join)(results.buildPath, 'package.json'), (0, _stringify2.default)(pkg, null, 2) + '\n');
 
           case 9:
-            _context4.next = 11;
-            return _fsExtra2.default.writeFileAsync((0, _path.join)(results.modulePath, 'package.json'), (0, _stringify2.default)(pkg, null, 2) + '\n');
-
-          case 11:
             return _context4.abrupt('return', results);
 
-          case 12:
+          case 10:
           case 'end':
             return _context4.stop();
         }
       }
     }, _callee4, this);
   }));
-  return function _buildModule(_x7, _x8) {
+  return function _buildModule(_x6) {
     return ref.apply(this, arguments);
   };
 }();
@@ -222,6 +231,7 @@ var _child_process = require('child_process');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var execAsync = _bluebird2.default.promisifyAll(_child_process.exec);
 var npmInstallAsync = _bluebird2.default.promisify(_spawnNpmInstall2.default);
 _bluebird2.default.promisifyAll(_fsExtra2.default);
 
@@ -334,7 +344,7 @@ function buildPackageJson(middleware) {
   return _bluebird2.default.reduce(middleware, function (pkg, func) {
     return _bluebird2.default.resolve(func(access)).then(function (newPkgProps) {
       var newState = (0, _deepAssign2.default)({}, pkg, newPkgProps);
-      access.package = newState;
+      access.pkg = newState;
       return newState;
     });
   }, {});
@@ -394,20 +404,14 @@ function getMiddleware(modules, path) {
 exports.buildPackage = _buildPackage;
 exports.buildModule = _buildModule;
 
-
-var execAsync = _bluebird2.default.promisifyAll(_child_process.exec);
-
-// const tentprebuild = `npm run tentprebuild &> /dev/null || :`
-// const tentpostbuild = `npm run tentpostbuild &> /dev/null || :`
-
 var Tent = function () {
   function Tent() {
-    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-    var _ref$outDir = _ref.outDir;
-    var outDir = _ref$outDir === undefined ? './' : _ref$outDir;
-    var _ref$temp = _ref.temp;
-    var temp = _ref$temp === undefined ? true : _ref$temp;
+    var _ref3$outDir = _ref3.outDir;
+    var outDir = _ref3$outDir === undefined ? './' : _ref3$outDir;
+    var _ref3$temp = _ref3.temp;
+    var temp = _ref3$temp === undefined ? true : _ref3$temp;
     (0, _classCallCheck3.default)(this, Tent);
 
     this.cwd = process.cwd();
@@ -425,10 +429,6 @@ var Tent = function () {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                console.log(this.tempOutDir);
-                // await fs.removeAsync(this.tempOutDir)
-
-              case 1:
               case 'end':
                 return _context5.stop();
             }
@@ -444,19 +444,28 @@ var Tent = function () {
     }()
   }, {
     key: 'buildPackage',
+
+    // await fs.removeAsync(this.tempOutDir)
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(file) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(filePath) {
+        var fileContent;
         return _regenerator2.default.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                _context6.next = 2;
-                return _buildPackage(file, this.outDir);
-
-              case 2:
-                return _context6.abrupt('return', _context6.sent);
+                filePath = (0, _path.join)(this.cwd, filePath);
+                _context6.next = 3;
+                return getFileContents(fullFilePath);
 
               case 3:
+                fileContent = _context6.sent;
+                _context6.next = 6;
+                return _buildPackage({ fileContent: fileContent, fullFilePath: fullFilePath, outDir: this.outDir, tmpDir: this.tempOutDir });
+
+              case 6:
+                return _context6.abrupt('return', _context6.sent);
+
+              case 7:
               case 'end':
                 return _context6.stop();
             }
@@ -464,7 +473,7 @@ var Tent = function () {
         }, _callee6, this);
       }));
 
-      function buildPackage(_x10) {
+      function buildPackage(_x8) {
         return ref.apply(this, arguments);
       }
 
@@ -473,18 +482,25 @@ var Tent = function () {
   }, {
     key: 'buildModule',
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(file) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(filePath) {
+        var fileContent;
         return _regenerator2.default.wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
-                _context7.next = 2;
-                return _buildModule(file, this.outDir);
-
-              case 2:
-                return _context7.abrupt('return', _context7.sent);
+                filePath = (0, _path.join)(this.cwd, filePath);
+                _context7.next = 3;
+                return getFileContents(fullFilePath);
 
               case 3:
+                fileContent = _context7.sent;
+                _context7.next = 6;
+                return _buildModule({ fileContent: fileContent, fullFilePath: fullFilePath, outDir: this.outDir, tmpDir: this.tempOutDir });
+
+              case 6:
+                return _context7.abrupt('return', _context7.sent);
+
+              case 7:
               case 'end':
                 return _context7.stop();
             }
@@ -492,7 +508,7 @@ var Tent = function () {
         }, _callee7, this);
       }));
 
-      function buildModule(_x11) {
+      function buildModule(_x9) {
         return ref.apply(this, arguments);
       }
 
@@ -501,7 +517,7 @@ var Tent = function () {
   }, {
     key: 'runBuildModule',
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(file, action) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(filePath, action) {
         var cd;
         return _regenerator2.default.wrap(function _callee8$(_context8) {
           while (1) {
@@ -509,7 +525,7 @@ var Tent = function () {
               case 0:
                 cd = 'cd ' + this.outDir;
                 _context8.next = 3;
-                return this.buildModule(file);
+                return this.buildModule(filePath);
 
               case 3:
                 if (!action) {
@@ -528,7 +544,7 @@ var Tent = function () {
         }, _callee8, this);
       }));
 
-      function runBuildModule(_x12, _x13) {
+      function runBuildModule(_x10, _x11) {
         return ref.apply(this, arguments);
       }
 
@@ -549,7 +565,7 @@ var Tent = function () {
         }, _callee9, this);
       }));
 
-      function runBuildGist(_x14, _x15) {
+      function runBuildGist(_x12, _x13) {
         return ref.apply(this, arguments);
       }
 
@@ -589,7 +605,7 @@ var Tent = function () {
         }, _callee10, this);
       }));
 
-      function execAction(_x16) {
+      function execAction(_x14) {
         return ref.apply(this, arguments);
       }
 

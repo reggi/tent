@@ -131,7 +131,7 @@ export function buildPackageJson(middleware, access = {}) {
   return Promise.reduce(middleware, (pkg, func) => {
     return Promise.resolve(func(access)).then(newPkgProps => {
       let newState = deepAssign({}, pkg, newPkgProps)
-      access.package = newState
+      access.pkg = newState
       return newState
     })
   }, {})
@@ -194,29 +194,31 @@ export function getMiddleware (modules, path) {
   return middleware
 }
 
-export async function buildPackage (file, tmp) {
+export async function buildPackage ({fileContent, filePath, outDir, tmpDir}) {
   let results = {}
-  results.tmp = tmp
-  results.file = file
-  results.comments = getComments(file)
+  results.fileContent = fileContent
+  results.filePath = filePath
+  results.outDir = outDir
+  results.tmpDir = tmpDir
+  results.comments = getComments(fileContent)
   results.syntax = parseCommentsSyntax(results.comments)
   results.values = resolveValues(results.syntax)
   results.build = (results.values.build) ? parseNpmModuleSytax(results.values.build) : false
+  results.buildPath = (results.build) ? pathJoin(this.outDir, results.build.module) : false
   results.foundation = processFoundation(results.values.foundation)
   results.installModules = results.foundation.map(item => item.download)
-  await installNpmModules(results.installModules, tmp)
-  results.middleware = getMiddleware(results.foundation, tmp)
+  await installNpmModules(results.installModules, tmpDir)
+  results.middleware = getMiddleware(results.foundation, tmpDir)
   results.pkg = await buildPackageJson(results.middleware, results)
   return results
 }
 
-export async function buildModule (file, tmp) {
-  let results = await buildPackage(file, tmp)
-  let {pkg, build} = results
+export async function buildModule({fileContent, filePath, outDir, tmpDir}) {
+  let results = await buildPackage(fileContent, tmp)
+  let {pkg} = results
   if (build) {
-    results.modulePath = pathJoin(tmp, build.module)
-    await fs.ensureDirAsync(results.modulePath)
-    await fs.writeFileAsync(pathJoin(results.modulePath, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
+    await fs.ensureDirAsync(results.buildPath)
+    await fs.writeFileAsync(pathJoin(results.buildPath, 'package.json'), JSON.stringify(pkg, null, 2) + '\n')
   }
   return results
 }
@@ -230,18 +232,21 @@ export default class Tent {
     this.downloadDir = pathJoin(this.tempOutDir, 'downloads')
   }
   async finish () {
-    console.log(this.tempOutDir)
     // await fs.removeAsync(this.tempOutDir)
   }
-  async buildPackage(file) {
-    return await buildPackage(file, this.outDir)
+  async buildPackage(filePath) {
+    filePath = pathJoin(this.cwd, filePath)
+    let fileContent = await getFileContents(fullFilePath)
+    return await buildPackage({fileContent, fullFilePath, outDir: this.outDir, tmpDir: this.tempOutDir})
   }
-  async buildModule(file) {
-    return await buildModule(file, this.outDir)
+  async buildModule(filePath) {
+    filePath = pathJoin(this.cwd, filePath)
+    let fileContent = await getFileContents(fullFilePath)
+    return await buildModule({fileContent, fullFilePath, outDir: this.outDir, tmpDir: this.tempOutDir})
   }
-  async runBuildModule (file, action) {
+  async runBuildModule (filePath, action) {
     let cd = `cd ${this.outDir}`
-    await this.buildModule(file)
+    await this.buildModule(filePath)
     if (action) await execAsync([cd, action])
   }
   async runBuildGist(url, action) {
