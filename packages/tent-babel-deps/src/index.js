@@ -5,7 +5,7 @@ import { get, extend, size } from 'lodash'
 
 const npmLatestAsync = Promise.promisify(npmLatest)
 
-async function getNpmVersion (dep) {
+export async function getNpmVersion (dep) {
   try {
     let { name, version } = await npmLatestAsync(dep)
     return { name, version }
@@ -14,12 +14,12 @@ async function getNpmVersion (dep) {
   }
 }
 
-function mapModulesToDeps (modules) {
+export function mapModulesToDeps (modules) {
   let deps = modules.map(module => ({[module.name]: module.version}))
   return extend.apply(null, deps)
 }
 
-function parseModuleSyntax (modules) {
+export function parseModuleSyntax (modules) {
   return modules.map(mod => {
     if (mod.match('@')) {
       let parts = mod.split('@')
@@ -32,7 +32,7 @@ function parseModuleSyntax (modules) {
   })
 }
 
-function getModuleVersions (modules) {
+export function getModuleVersions (modules) {
   return Promise.map(modules, mod => {
     if (!mod.version) {
       return getNpmVersion(mod.name).then(mod => {
@@ -44,7 +44,7 @@ function getModuleVersions (modules) {
   })
 }
 
-function mapModulesToLocalDeps (modules) {
+export function mapModulesToLocalDeps (modules) {
   let deps = modules.filter(mod => mod.version).map(mod => ({[`${mod.name}@${mod.version}`]: mod.name}))
   return extend.apply(null, deps)
 }
@@ -62,10 +62,11 @@ export default function () {
     let dependencies = mapModulesToDeps(modules)
     let localDependencies = mapModulesToLocalDeps(ogModules)
 
+    let scripts = {}
     let script = []
     if (get(tent, 'pkg.script.tentpostinstall')) script.push(tent.pkg.script.tentpostinstall)
     script.push(`tent-module-assign install`)
-    script.tentpostinstall = script.join(' && ')
+    scripts.tentpostinstall = script.join(' && ')
 
     let result = {}
     result.dependencies = dependencies

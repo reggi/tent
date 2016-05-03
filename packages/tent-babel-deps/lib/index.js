@@ -12,11 +12,17 @@ var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
+exports.getNpmVersion = getNpmVersion;
+exports.mapModulesToDeps = mapModulesToDeps;
+exports.parseModuleSyntax = parseModuleSyntax;
+exports.getModuleVersions = getModuleVersions;
+exports.mapModulesToLocalDeps = mapModulesToLocalDeps;
+
 exports.default = function () {
   var _this = this;
 
   return function _callee(tent) {
-    var code, modules, ogModules, devDependencies, dependencies, localDependencies, script, result;
+    var code, modules, ogModules, devDependencies, dependencies, localDependencies, scripts, script, result;
     return _regenerator2.default.async(function _callee$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -43,11 +49,12 @@ exports.default = function () {
             devDependencies = mapModulesToDeps(devDependencies);
             dependencies = mapModulesToDeps(modules);
             localDependencies = mapModulesToLocalDeps(ogModules);
+            scripts = {};
             script = [];
 
             if ((0, _lodash.get)(tent, 'pkg.script.tentpostinstall')) script.push(tent.pkg.script.tentpostinstall);
             script.push('tent-module-assign install');
-            script.tentpostinstall = script.join(' && ');
+            scripts.tentpostinstall = script.join(' && ');
 
             result = {};
 
@@ -59,7 +66,7 @@ exports.default = function () {
             }
             return _context2.abrupt('return', result);
 
-          case 22:
+          case 23:
           case 'end':
             return _context2.stop();
         }

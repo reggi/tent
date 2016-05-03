@@ -13,7 +13,7 @@ yargs
       })
   })
   .command('build', 'Build module for file.', {}, function (argv) {
-    let temp = (argv.temp || argv.tmp) ? argv.temp || argv.tmp : true
+    let temp = (argv.temp || argv.tmp) ? argv.temp || argv.tmp : false
     return new Tent({temp}).runBuildModule(argv._[1], 'install')
       .then(() => console.log('done'))
       .catch(err => {
@@ -22,7 +22,7 @@ yargs
       })
   })
   .command('build-gist', 'Build module for gist.', {}, function (argv) {
-    let temp = (argv.temp || argv.tmp) ? argv.temp || argv.tmp : true
+    let temp = (argv.temp || argv.tmp) ? argv.temp || argv.tmp : false
     return new Tent({temp}).runBuildGist(argv._[1], 'install')
       .then(() => console.log('done'))
       .catch(err => {

@@ -72,23 +72,24 @@ function tentBabel() {
   return function _callee(tent) {
     var _scripts;
 
-    var presetsDeps, pluginsDeps, devDependencies, incomingFile, outgoingFile, script;
+    var base, presetsDeps, pluginsDeps, devDependencies, incomingFile, outgoingFile, script;
     return _regenerator2.default.async(function _callee$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            _context2.next = 2;
+            base = (0, _path.parse)(tent.filePath).base;
+            _context2.next = 3;
             return _regenerator2.default.awrap(_fsExtra2.default.ensureDirAsync(tent.buildPath));
 
-          case 2:
-            _context2.next = 4;
+          case 3:
+            _context2.next = 5;
             return _regenerator2.default.awrap(_bluebird2.default.all([_fsExtra2.default.ensureDirAsync((0, _path.join)(tent.buildPath, 'src')), _fsExtra2.default.ensureDirAsync((0, _path.join)(tent.buildPath, 'lib'))]));
 
-          case 4:
-            _context2.next = 6;
-            return _regenerator2.default.awrap(_fsExtra2.default.writeFileAsync((0, _path.join)(tent.buildPath, '/src/index.js'), tent.fileContent));
+          case 5:
+            _context2.next = 7;
+            return _regenerator2.default.awrap(_fsExtra2.default.writeFileAsync((0, _path.join)(tent.buildPath, '/src/', base), tent.fileContent));
 
-          case 6:
+          case 7:
             presetsDeps = presets ? (0, _lodash.map)(presets, function (preset) {
               return 'babel-preset-' + preset;
             }) : [];
@@ -96,13 +97,13 @@ function tentBabel() {
               return 'babel-plugin-' + plugin;
             }) : [];
             devDependencies = ['babel-cli'].concat((0, _toConsumableArray3.default)(pluginsDeps), (0, _toConsumableArray3.default)(presetsDeps));
-            _context2.next = 11;
+            _context2.next = 12;
             return _regenerator2.default.awrap(getDeps(devDependencies));
 
-          case 11:
+          case 12:
             devDependencies = _context2.sent;
-            incomingFile = (0, _path.join)('src', (0, _path.parse)(tent.filePath).base);
-            outgoingFile = (0, _path.join)('lib', (0, _path.parse)(tent.filePath).base);
+            incomingFile = (0, _path.join)('src', base);
+            outgoingFile = (0, _path.join)('lib', base);
             script = [];
 
             if ((0, _lodash.get)(tent, 'pkg.script.tentpostinstall')) script.push(tent.pkg.script.tentpostinstall);
@@ -119,7 +120,7 @@ function tentBabel() {
               }
             });
 
-          case 18:
+          case 19:
           case 'end':
             return _context2.stop();
         }

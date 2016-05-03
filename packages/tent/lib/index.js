@@ -116,7 +116,7 @@ var _buildPackage = function () {
             results.syntax = parseCommentsSyntax(results.comments);
             results.values = resolveValues(results.syntax);
             results.build = results.values.build ? parseNpmModuleSytax(results.values.build) : false;
-            results.buildPath = results.build ? (0, _path.join)(this.outDir, results.build.module) : false;
+            results.buildPath = results.build ? (0, _path.join)(results.outDir, results.build.module) : false;
             results.foundation = processFoundation(results.values.foundation);
             results.installModules = results.foundation.map(function (item) {
               return item.download;
@@ -146,39 +146,41 @@ var _buildPackage = function () {
 }();
 
 var _buildModule = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(_ref2) {
-    var fileContent = _ref2.fileContent;
-    var filePath = _ref2.filePath;
-    var outDir = _ref2.outDir;
-    var tmpDir = _ref2.tmpDir;
-    var results, pkg;
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4(options) {
+    var fileContent, filePath, outDir, tmpDir, results, pkg, build, buildPath;
     return _regenerator2.default.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
-            _context4.next = 2;
-            return _buildPackage(fileContent, tmp);
+            fileContent = options.fileContent;
+            filePath = options.filePath;
+            outDir = options.outDir;
+            tmpDir = options.tmpDir;
+            _context4.next = 6;
+            return _buildPackage(options);
 
-          case 2:
+          case 6:
             results = _context4.sent;
             pkg = results.pkg;
+            build = results.build;
+            buildPath = results.buildPath;
 
             if (!build) {
-              _context4.next = 9;
+              _context4.next = 15;
               break;
             }
 
-            _context4.next = 7;
-            return _fsExtra2.default.ensureDirAsync(results.buildPath);
+            _context4.next = 13;
+            return _fsExtra2.default.ensureDirAsync(buildPath);
 
-          case 7:
-            _context4.next = 9;
-            return _fsExtra2.default.writeFileAsync((0, _path.join)(results.buildPath, 'package.json'), (0, _stringify2.default)(pkg, null, 2) + '\n');
+          case 13:
+            _context4.next = 15;
+            return _fsExtra2.default.writeFileAsync((0, _path.join)(buildPath, 'package.json'), (0, _stringify2.default)(pkg, null, 2) + '\n');
 
-          case 9:
+          case 15:
             return _context4.abrupt('return', results);
 
-          case 10:
+          case 16:
           case 'end':
             return _context4.stop();
         }
@@ -406,12 +408,12 @@ exports.buildModule = _buildModule;
 
 var Tent = function () {
   function Tent() {
-    var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-    var _ref3$outDir = _ref3.outDir;
-    var outDir = _ref3$outDir === undefined ? './' : _ref3$outDir;
-    var _ref3$temp = _ref3.temp;
-    var temp = _ref3$temp === undefined ? true : _ref3$temp;
+    var _ref2$outDir = _ref2.outDir;
+    var outDir = _ref2$outDir === undefined ? './' : _ref2$outDir;
+    var _ref2$temp = _ref2.temp;
+    var temp = _ref2$temp === undefined ? true : _ref2$temp;
     (0, _classCallCheck3.default)(this, Tent);
 
     this.cwd = process.cwd();
@@ -455,12 +457,12 @@ var Tent = function () {
               case 0:
                 filePath = (0, _path.join)(this.cwd, filePath);
                 _context6.next = 3;
-                return getFileContents(fullFilePath);
+                return getFileContents(filePath);
 
               case 3:
                 fileContent = _context6.sent;
                 _context6.next = 6;
-                return _buildPackage({ fileContent: fileContent, fullFilePath: fullFilePath, outDir: this.outDir, tmpDir: this.tempOutDir });
+                return _buildPackage({ fileContent: fileContent, filePath: filePath, outDir: this.outDir, tmpDir: this.tempOutDir });
 
               case 6:
                 return _context6.abrupt('return', _context6.sent);
@@ -490,12 +492,12 @@ var Tent = function () {
               case 0:
                 filePath = (0, _path.join)(this.cwd, filePath);
                 _context7.next = 3;
-                return getFileContents(fullFilePath);
+                return getFileContents(filePath);
 
               case 3:
                 fileContent = _context7.sent;
                 _context7.next = 6;
-                return _buildModule({ fileContent: fileContent, fullFilePath: fullFilePath, outDir: this.outDir, tmpDir: this.tempOutDir });
+                return _buildModule({ fileContent: fileContent, filePath: filePath, outDir: this.outDir, tmpDir: this.tempOutDir });
 
               case 6:
                 return _context7.abrupt('return', _context7.sent);
@@ -518,25 +520,29 @@ var Tent = function () {
     key: 'runBuildModule',
     value: function () {
       var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(filePath, action) {
-        var cd;
+        var _ref3, buildPath, cd;
+
         return _regenerator2.default.wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
-                cd = 'cd ' + this.outDir;
-                _context8.next = 3;
+                _context8.next = 2;
                 return this.buildModule(filePath);
 
-              case 3:
+              case 2:
+                _ref3 = _context8.sent;
+                buildPath = _ref3.buildPath;
+                cd = 'cd ' + buildPath;
+
                 if (!action) {
-                  _context8.next = 6;
+                  _context8.next = 8;
                   break;
                 }
 
-                _context8.next = 6;
-                return execAsync([cd, action]);
+                _context8.next = 8;
+                return this.execAction([cd, action].join(' && '));
 
-              case 6:
+              case 8:
               case 'end':
                 return _context8.stop();
             }
