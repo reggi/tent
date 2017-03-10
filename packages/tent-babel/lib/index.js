@@ -72,7 +72,7 @@ function tentBabel() {
   return function _callee(tent) {
     var _scripts;
 
-    var base, presetsDeps, pluginsDeps, devDependencies, incomingFile, outgoingFile, script;
+    var base, presetsDeps, pluginsDeps, devDependencies, incomingFile, outgoingFile, tentpostinstallScript;
     return _regenerator2.default.async(function _callee$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -104,15 +104,15 @@ function tentBabel() {
             devDependencies = _context2.sent;
             incomingFile = (0, _path.join)('src', base);
             outgoingFile = (0, _path.join)('lib', base);
-            script = [];
+            tentpostinstallScript = [];
 
-            if ((0, _lodash.get)(tent, 'pkg.script.tentpostinstall')) script.push(tent.pkg.script.tentpostinstall);
-            script.push('npm run ' + buildScript);
+            if ((0, _lodash.get)(tent, 'pkg.scripts.tentpostinstall')) tentpostinstallScript.push(tent.pkg.scripts.tentpostinstall);
+            tentpostinstallScript.push('npm run ' + buildScript);
 
             return _context2.abrupt('return', {
               'main': outgoingFile,
               'jsnext:main': incomingFile,
-              "scripts": (_scripts = {}, (0, _defineProperty3.default)(_scripts, buildScript, 'babel ./src/index.js --out-file ./lib/index.js'), (0, _defineProperty3.default)(_scripts, 'tentpostinstall', script.join(' && ')), _scripts),
+              "scripts": (_scripts = {}, (0, _defineProperty3.default)(_scripts, buildScript, 'babel ./' + incomingFile + ' --out-file ./' + outgoingFile), (0, _defineProperty3.default)(_scripts, 'tentpostinstall', tentpostinstallScript.join(' && ')), _scripts),
               devDependencies: devDependencies,
               babel: {
                 presets: presets,

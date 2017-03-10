@@ -22,7 +22,7 @@ exports.default = function () {
   var _this = this;
 
   return function _callee(tent) {
-    var code, modules, ogModules, devDependencies, dependencies, localDependencies, scripts, script, result;
+    var code, modules, ogModules, devDependencies, dependencies, localDependencies, tentpostinstallScript, result;
     return _regenerator2.default.async(function _callee$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -39,7 +39,7 @@ exports.default = function () {
             modules = modules.filter(function (mod) {
               return !mod.name.match(/^.\.\/|^.\/|^\//);
             });
-            devDependencies = [{ 'name': 'tent-module-assign', 'version': '1.0.0' }];
+            devDependencies = [{ 'name': 'tent-module-assign' }];
             _context2.next = 10;
             return _regenerator2.default.awrap(getModuleVersions(devDependencies));
 
@@ -49,24 +49,24 @@ exports.default = function () {
             devDependencies = mapModulesToDeps(devDependencies);
             dependencies = mapModulesToDeps(modules);
             localDependencies = mapModulesToLocalDeps(ogModules);
-            scripts = {};
-            script = [];
+            tentpostinstallScript = [];
 
-            if ((0, _lodash.get)(tent, 'pkg.script.tentpostinstall')) script.push(tent.pkg.script.tentpostinstall);
-            script.push('tent-module-assign install');
-            scripts.tentpostinstall = script.join(' && ');
+            if ((0, _lodash.get)(tent, 'pkg.scripts.tentpostinstall')) tentpostinstallScript.push(tent.pkg.scripts.tentpostinstall);
+            tentpostinstallScript.push('tent-module-assign install');
 
             result = {};
 
             result.dependencies = dependencies;
             if ((0, _lodash.size)(localDependencies)) {
               result.localDependencies = localDependencies;
-              result.scripts = scripts;
+              result.scripts = {
+                "tentpostinstall": tentpostinstallScript.join(' && ')
+              };
               result.devDependencies = devDependencies;
             }
             return _context2.abrupt('return', result);
 
-          case 23:
+          case 21:
           case 'end':
             return _context2.stop();
         }

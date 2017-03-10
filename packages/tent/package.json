@@ -43,6 +43,7 @@
     "deep-assign": "^2.0.0",
     "fs-extra": "^0.28.0",
     "lodash": "^4.11.1",
+    "npm-programatic": "^1.0.0",
     "os-tmpdir": "^1.0.1",
     "spawn-npm-install": "^1.2.0",
     "yargs": "^4.6.0"

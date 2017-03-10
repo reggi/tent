@@ -1,15 +1,18 @@
-import { join as pathJoin } from 'path'
+import { join as pathJoin, basename as pathBasename } from 'path'
 import deepAssign from 'deep-assign'
 import Promise from 'bluebird'
-import { without, isFunction, isPlainObject, isArray, flattenDeep, mapValues, map, extend, includes, chain, difference } from 'lodash'
+import { each, get, without, isFunction, isPlainObject, isArray, flattenDeep, mapValues, map, extend, includes, chain, difference } from 'lodash'
 import { parse as urlParse } from 'url'
 import fs from 'fs-extra'
-import npmInstall from 'spawn-npm-install'
+import npm from 'npm-programatic'
 import osTmpDir from 'os-tmpdir'
 import { exec } from 'child_process'
+import Download from 'download'
+import Gisty from 'gisty'
+// import Debug from 'debug'
+// let debug = Debug('tent:core')
 
 const execAsync = Promise.promisifyAll(exec)
-const npmInstallAsync = Promise.promisify(npmInstall)
 Promise.promisifyAll(fs)
 
 export function parseNpmModuleSytax (str) {
@@ -123,7 +126,7 @@ export async function installNpmModules(modules, path) {
   }
   await fs.ensureDirAsync(path)
   await fs.writeFileAsync(pathJoin(path, 'package.json'), JSON.stringify(pkg))
-  await npmInstallAsync(modules, { stdio: 'inherit', cwd: path })
+  await npm('install', {deps: modules, stdio: 'inherit', cwd: path })
   return true
 }
 
@@ -224,9 +227,24 @@ export async function buildModule(options) {
   return results
 }
 
-import spawnNpm from '../spawn-npm/index.js'
+export async function download(dataSet) {
+  return new Promise((resolve, reject) => {
+    let d = new Download({mode: '777'})
+    each(dataSet, data => {
+      d.get(data.url, data.file)
+    })
+    d.run((err, val) => {
+      if (err) return reject(err)
+      return resolve(val)
+    })
+  })
+}
 
-
+export async function getGist({username, id}) {
+  let gist = new Gisty({ username })
+  let gistAsync = Promise.promisify(gist.fetch.bind(gist))
+  return await gistAsync(id)
+}
 
 export default class Tent {
   constructor({outDir = './', temp = true} = {}){
@@ -251,25 +269,35 @@ export default class Tent {
   }
   async runBuildModule (filePath, action) {
     let { buildPath } = await this.buildModule(filePath)
-    let cd = `cd ${buildPath}`
-    if (action) await this.execAction([cd, action].join(' && '))
+    if (action) await this.npmActions(buildPath, action)
   }
-  async runBuildGist(url, action) {
-
+  async runBuildGist(gistUrl, action) {
+    let parsedGistUrl = parseGistUrl(gistUrl)
+    let gistData = await getGist(parsedGistUrl)
+    // console.log(gistData)
+    if (gistData.files.length > 1) throw new Error('gist can only contain one file')
+    let exportfiles = map(gistData.files, file => {
+      return {url: file.raw_url, file: this.tempOutDir, basename: pathBasename(file.raw_url)}
+    })
+    await download(exportfiles)
+    let filePath = pathJoin(exportfiles[0].file, exportfiles[0].basename)
+    let fileContent = await getFileContents(filePath)
+    // console.log(fileContent)
+    return await buildModule({fileContent, filePath, outDir: this.tempOutDir, tmpDir: this.tempOutDir})
   }
   async npmActions (cwd, {install, publish}) {
     let opts = { cwd, stdio: 'inherit' }
     let pkgPath = pathJoin(cwd, 'package.json')
     let pkg = await fs.readFileAsync(pkgPath, 'utf8').then(JSON.parse)
     if (install) {
-      if (get(pkg, 'scripts.tentpreinstall')) await spawnNpm('run tentpreinstall', opts)
-      await spawnNpm('install', opts)
-      if (get(pkg, 'scripts.tentpostinstall')) await spawnNpm('run tentpostinstall', opts)
+      if (get(pkg, 'scripts.tentpreinstall')) await npm('run tentpreinstall', opts)
+      await npm('install', opts)
+      if (get(pkg, 'scripts.tentpostinstall')) await npm('run tentpostinstall', opts)
     }
     if (publish) {
-      if (get(pkg, 'scripts.tentprepublish')) await spawnNpm('run tentprepublish', opts)
-      await spawnNpm('publish', opts)
-      if (get(pkg, 'scripts.tentpostpublish')) await spawnNpm('run tentpostpublish', opts)
+      if (get(pkg, 'scripts.tentprepublish')) await npm('run tentprepublish', opts)
+      await npm('publish', opts)
+      if (get(pkg, 'scripts.tentpostpublish')) await npm('run tentpostpublish', opts)
     }
   }
 }

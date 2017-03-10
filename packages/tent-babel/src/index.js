@@ -39,16 +39,16 @@ export default function tentBabel ({presets = [], plugins = [], buildScript = 'b
     let incomingFile = pathJoin('src', base)
     let outgoingFile = pathJoin('lib', base)
 
-    let script = []
-    if (get(tent, 'pkg.script.tentpostinstall')) script.push(tent.pkg.script.tentpostinstall)
-    script.push(`npm run ${buildScript}`)
+    let tentpostinstallScript = []
+    if (get(tent, 'pkg.scripts.tentpostinstall')) tentpostinstallScript.push(tent.pkg.scripts.tentpostinstall)
+    tentpostinstallScript.push(`npm run ${buildScript}`)
 
     return {
       'main': outgoingFile,
       'jsnext:main': incomingFile,
       "scripts": {
-        [buildScript]: `babel ./src/index.js --out-file ./lib/index.js`,
-        'tentpostinstall': script.join(' && ')
+        [buildScript]: `babel ./${incomingFile} --out-file ./${outgoingFile}`,
+        'tentpostinstall': tentpostinstallScript.join(' && ')
       },
       devDependencies,
       babel: {

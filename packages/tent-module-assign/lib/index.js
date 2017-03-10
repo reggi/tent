@@ -136,9 +136,6 @@ var ModuleAssign = function () {
               return _regenerator2.default.awrap(this.aliasModules(this.localDependencies));
 
             case 14:
-              console.log(this);
-
-            case 15:
             case 'end':
               return _context3.stop();
           }

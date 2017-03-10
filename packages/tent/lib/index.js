@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.buildModule = exports.buildPackage = exports.installNpmModules = exports.getFileContents = undefined;
+exports.getGist = exports.download = exports.buildModule = exports.buildPackage = exports.installNpmModules = exports.getFileContents = undefined;
 
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
@@ -78,7 +78,7 @@ var installNpmModules = exports.installNpmModules = function () {
 
           case 5:
             _context2.next = 7;
-            return npmInstallAsync(modules, { stdio: 'inherit', cwd: path });
+            return (0, _npmProgramatic2.default)('install', { deps: modules, stdio: 'inherit', cwd: path });
 
           case 7:
             return _context2.abrupt('return', true);
@@ -192,6 +192,64 @@ var _buildModule = function () {
   };
 }();
 
+var download = exports.download = function () {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(dataSet) {
+    return _regenerator2.default.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            return _context5.abrupt('return', new _bluebird2.default(function (resolve, reject) {
+              var d = new _download2.default({ mode: '777' });
+              (0, _lodash.each)(dataSet, function (data) {
+                d.get(data.url, data.file);
+              });
+              d.run(function (err, val) {
+                if (err) return reject(err);
+                return resolve(val);
+              });
+            }));
+
+          case 1:
+          case 'end':
+            return _context5.stop();
+        }
+      }
+    }, _callee5, this);
+  }));
+  return function download(_x7) {
+    return ref.apply(this, arguments);
+  };
+}();
+
+var getGist = exports.getGist = function () {
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(_ref2) {
+    var username = _ref2.username;
+    var id = _ref2.id;
+    var gist, gistAsync;
+    return _regenerator2.default.wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            gist = new _gisty2.default({ username: username });
+            gistAsync = _bluebird2.default.promisify(gist.fetch.bind(gist));
+            _context6.next = 4;
+            return gistAsync(id);
+
+          case 4:
+            return _context6.abrupt('return', _context6.sent);
+
+          case 5:
+          case 'end':
+            return _context6.stop();
+        }
+      }
+    }, _callee6, this);
+  }));
+  return function getGist(_x8) {
+    return ref.apply(this, arguments);
+  };
+}();
+
 exports.parseNpmModuleSytax = parseNpmModuleSytax;
 exports.parseJsbinUrl = parseJsbinUrl;
 exports.parseGistUrl = parseGistUrl;
@@ -221,9 +279,9 @@ var _fsExtra = require('fs-extra');
 
 var _fsExtra2 = _interopRequireDefault(_fsExtra);
 
-var _spawnNpmInstall = require('spawn-npm-install');
+var _npmProgramatic = require('npm-programatic');
 
-var _spawnNpmInstall2 = _interopRequireDefault(_spawnNpmInstall);
+var _npmProgramatic2 = _interopRequireDefault(_npmProgramatic);
 
 var _osTmpdir = require('os-tmpdir');
 
@@ -231,10 +289,20 @@ var _osTmpdir2 = _interopRequireDefault(_osTmpdir);
 
 var _child_process = require('child_process');
 
+var _download = require('download');
+
+var _download2 = _interopRequireDefault(_download);
+
+var _gisty = require('gisty');
+
+var _gisty2 = _interopRequireDefault(_gisty);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// import Debug from 'debug'
+// let debug = Debug('tent:core')
+
 var execAsync = _bluebird2.default.promisifyAll(_child_process.exec);
-var npmInstallAsync = _bluebird2.default.promisify(_spawnNpmInstall2.default);
 _bluebird2.default.promisifyAll(_fsExtra2.default);
 
 function parseNpmModuleSytax(str) {
@@ -408,12 +476,12 @@ exports.buildModule = _buildModule;
 
 var Tent = function () {
   function Tent() {
-    var _ref2 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+    var _ref3 = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
-    var _ref2$outDir = _ref2.outDir;
-    var outDir = _ref2$outDir === undefined ? './' : _ref2$outDir;
-    var _ref2$temp = _ref2.temp;
-    var temp = _ref2$temp === undefined ? true : _ref2$temp;
+    var _ref3$outDir = _ref3.outDir;
+    var outDir = _ref3$outDir === undefined ? './' : _ref3$outDir;
+    var _ref3$temp = _ref3.temp;
+    var temp = _ref3$temp === undefined ? true : _ref3$temp;
     (0, _classCallCheck3.default)(this, Tent);
 
     this.cwd = process.cwd();
@@ -426,16 +494,16 @@ var Tent = function () {
   (0, _createClass3.default)(Tent, [{
     key: 'finish',
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
-        return _regenerator2.default.wrap(function _callee5$(_context5) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7() {
+        return _regenerator2.default.wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
               case 'end':
-                return _context5.stop();
+                return _context7.stop();
             }
           }
-        }, _callee5, this);
+        }, _callee7, this);
       }));
 
       function finish() {
@@ -449,33 +517,33 @@ var Tent = function () {
 
     // await fs.removeAsync(this.tempOutDir)
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(filePath) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(filePath) {
         var fileContent;
-        return _regenerator2.default.wrap(function _callee6$(_context6) {
+        return _regenerator2.default.wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
                 filePath = (0, _path.join)(this.cwd, filePath);
-                _context6.next = 3;
+                _context8.next = 3;
                 return getFileContents(filePath);
 
               case 3:
-                fileContent = _context6.sent;
-                _context6.next = 6;
+                fileContent = _context8.sent;
+                _context8.next = 6;
                 return _buildPackage({ fileContent: fileContent, filePath: filePath, outDir: this.outDir, tmpDir: this.tempOutDir });
 
               case 6:
-                return _context6.abrupt('return', _context6.sent);
+                return _context8.abrupt('return', _context8.sent);
 
               case 7:
               case 'end':
-                return _context6.stop();
+                return _context8.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee8, this);
       }));
 
-      function buildPackage(_x8) {
+      function buildPackage(_x10) {
         return ref.apply(this, arguments);
       }
 
@@ -484,33 +552,33 @@ var Tent = function () {
   }, {
     key: 'buildModule',
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee7(filePath) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9(filePath) {
         var fileContent;
-        return _regenerator2.default.wrap(function _callee7$(_context7) {
+        return _regenerator2.default.wrap(function _callee9$(_context9) {
           while (1) {
-            switch (_context7.prev = _context7.next) {
+            switch (_context9.prev = _context9.next) {
               case 0:
                 filePath = (0, _path.join)(this.cwd, filePath);
-                _context7.next = 3;
+                _context9.next = 3;
                 return getFileContents(filePath);
 
               case 3:
-                fileContent = _context7.sent;
-                _context7.next = 6;
+                fileContent = _context9.sent;
+                _context9.next = 6;
                 return _buildModule({ fileContent: fileContent, filePath: filePath, outDir: this.outDir, tmpDir: this.tempOutDir });
 
               case 6:
-                return _context7.abrupt('return', _context7.sent);
+                return _context9.abrupt('return', _context9.sent);
 
               case 7:
               case 'end':
-                return _context7.stop();
+                return _context9.stop();
             }
           }
-        }, _callee7, this);
+        }, _callee9, this);
       }));
 
-      function buildModule(_x9) {
+      function buildModule(_x11) {
         return ref.apply(this, arguments);
       }
 
@@ -519,38 +587,37 @@ var Tent = function () {
   }, {
     key: 'runBuildModule',
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee8(filePath, action) {
-        var _ref3, buildPath, cd;
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee10(filePath, action) {
+        var _ref4, buildPath;
 
-        return _regenerator2.default.wrap(function _callee8$(_context8) {
+        return _regenerator2.default.wrap(function _callee10$(_context10) {
           while (1) {
-            switch (_context8.prev = _context8.next) {
+            switch (_context10.prev = _context10.next) {
               case 0:
-                _context8.next = 2;
+                _context10.next = 2;
                 return this.buildModule(filePath);
 
               case 2:
-                _ref3 = _context8.sent;
-                buildPath = _ref3.buildPath;
-                cd = 'cd ' + buildPath;
+                _ref4 = _context10.sent;
+                buildPath = _ref4.buildPath;
 
                 if (!action) {
-                  _context8.next = 8;
+                  _context10.next = 7;
                   break;
                 }
 
-                _context8.next = 8;
-                return this.execAction([cd, action].join(' && '));
+                _context10.next = 7;
+                return this.npmActions(buildPath, action);
 
-              case 8:
+              case 7:
               case 'end':
-                return _context8.stop();
+                return _context10.stop();
             }
           }
-        }, _callee8, this);
+        }, _callee10, this);
       }));
 
-      function runBuildModule(_x10, _x11) {
+      function runBuildModule(_x12, _x13) {
         return ref.apply(this, arguments);
       }
 
@@ -559,63 +626,147 @@ var Tent = function () {
   }, {
     key: 'runBuildGist',
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9(url, action) {
-        return _regenerator2.default.wrap(function _callee9$(_context9) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee11(gistUrl, action) {
+        var _this = this;
+
+        var parsedGistUrl, gistData, exportfiles, filePath, fileContent;
+        return _regenerator2.default.wrap(function _callee11$(_context11) {
           while (1) {
-            switch (_context9.prev = _context9.next) {
+            switch (_context11.prev = _context11.next) {
               case 0:
+                parsedGistUrl = parseGistUrl(gistUrl);
+                _context11.next = 3;
+                return getGist(parsedGistUrl);
+
+              case 3:
+                gistData = _context11.sent;
+
+                if (!(gistData.files.length > 1)) {
+                  _context11.next = 6;
+                  break;
+                }
+
+                throw new Error('gist can only contain one file');
+
+              case 6:
+                exportfiles = (0, _lodash.map)(gistData.files, function (file) {
+                  return { url: file.raw_url, file: _this.tempOutDir, basename: (0, _path.basename)(file.raw_url) };
+                });
+                _context11.next = 9;
+                return download(exportfiles);
+
+              case 9:
+                filePath = (0, _path.join)(exportfiles[0].file, exportfiles[0].basename);
+                _context11.next = 12;
+                return getFileContents(filePath);
+
+              case 12:
+                fileContent = _context11.sent;
+                _context11.next = 15;
+                return _buildModule({ fileContent: fileContent, filePath: filePath, outDir: this.tempOutDir, tmpDir: this.tempOutDir });
+
+              case 15:
+                return _context11.abrupt('return', _context11.sent);
+
+              case 16:
               case 'end':
-                return _context9.stop();
+                return _context11.stop();
             }
           }
-        }, _callee9, this);
+        }, _callee11, this);
       }));
 
-      function runBuildGist(_x12, _x13) {
+      function runBuildGist(_x14, _x15) {
         return ref.apply(this, arguments);
       }
 
       return runBuildGist;
     }()
   }, {
-    key: 'execAction',
+    key: 'npmActions',
     value: function () {
-      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee10(act) {
-        var action;
-        return _regenerator2.default.wrap(function _callee10$(_context10) {
+      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee12(cwd, _ref5) {
+        var install = _ref5.install;
+        var publish = _ref5.publish;
+        var opts, pkgPath, pkg;
+        return _regenerator2.default.wrap(function _callee12$(_context12) {
           while (1) {
-            switch (_context10.prev = _context10.next) {
+            switch (_context12.prev = _context12.next) {
               case 0:
-                action = {};
+                opts = { cwd: cwd, stdio: 'inherit' };
+                pkgPath = (0, _path.join)(cwd, 'package.json');
+                _context12.next = 4;
+                return _fsExtra2.default.readFileAsync(pkgPath, 'utf8').then(JSON.parse);
 
-                action.tentpreinstall = 'npm run tentpreinstall &> /dev/null || :';
-                action.tentpostinstall = 'npm run tentpostinstall &> /dev/null || :';
-                action.tentprepublish = 'npm run tentprepublish &> /dev/null || :';
-                action.tentpostpublish = 'npm run tentpostpublish &> /dev/null || :';
-                action.npminstall = 'npm install';
-                action.npmpublish = 'npm publish';
-                action.install = [action.tentpreinstall, action.npminstall, action.tentpostinstall].join(' && ');
-                action.publish = [action.tentprepublish, action.npmpublish, action.tentpostpublish].join(' && ');
-                action.installpublish = [action.install, action.publish].join(' && ');
-                _context10.next = 12;
-                return execAsync([cd, action[act]]);
+              case 4:
+                pkg = _context12.sent;
 
-              case 12:
-                return _context10.abrupt('return', _context10.sent);
+                if (!install) {
+                  _context12.next = 14;
+                  break;
+                }
 
-              case 13:
+                if (!(0, _lodash.get)(pkg, 'scripts.tentpreinstall')) {
+                  _context12.next = 9;
+                  break;
+                }
+
+                _context12.next = 9;
+                return (0, _npmProgramatic2.default)('run tentpreinstall', opts);
+
+              case 9:
+                _context12.next = 11;
+                return (0, _npmProgramatic2.default)('install', opts);
+
+              case 11:
+                if (!(0, _lodash.get)(pkg, 'scripts.tentpostinstall')) {
+                  _context12.next = 14;
+                  break;
+                }
+
+                _context12.next = 14;
+                return (0, _npmProgramatic2.default)('run tentpostinstall', opts);
+
+              case 14:
+                if (!publish) {
+                  _context12.next = 23;
+                  break;
+                }
+
+                if (!(0, _lodash.get)(pkg, 'scripts.tentprepublish')) {
+                  _context12.next = 18;
+                  break;
+                }
+
+                _context12.next = 18;
+                return (0, _npmProgramatic2.default)('run tentprepublish', opts);
+
+              case 18:
+                _context12.next = 20;
+                return (0, _npmProgramatic2.default)('publish', opts);
+
+              case 20:
+                if (!(0, _lodash.get)(pkg, 'scripts.tentpostpublish')) {
+                  _context12.next = 23;
+                  break;
+                }
+
+                _context12.next = 23;
+                return (0, _npmProgramatic2.default)('run tentpostpublish', opts);
+
+              case 23:
               case 'end':
-                return _context10.stop();
+                return _context12.stop();
             }
           }
-        }, _callee10, this);
+        }, _callee12, this);
       }));
 
-      function execAction(_x14) {
+      function npmActions(_x16, _x17) {
         return ref.apply(this, arguments);
       }
 
-      return execAction;
+      return npmActions;
     }()
   }]);
   return Tent;

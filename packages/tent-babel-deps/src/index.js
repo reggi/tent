@@ -56,23 +56,23 @@ export default function () {
     let ogModules = parseModuleSyntax(modules)
     modules = await getModuleVersions(ogModules)
     modules = modules.filter(mod => !mod.name.match(/^.\.\/|^.\/|^\//))
-    let devDependencies = [{'name': 'tent-module-assign', 'version': '1.0.0'}]
+    let devDependencies = [{'name': 'tent-module-assign'}]
     devDependencies = await getModuleVersions(devDependencies)
     devDependencies = mapModulesToDeps(devDependencies)
     let dependencies = mapModulesToDeps(modules)
     let localDependencies = mapModulesToLocalDeps(ogModules)
 
-    let scripts = {}
-    let script = []
-    if (get(tent, 'pkg.script.tentpostinstall')) script.push(tent.pkg.script.tentpostinstall)
-    script.push(`tent-module-assign install`)
-    scripts.tentpostinstall = script.join(' && ')
+    let tentpostinstallScript = []
+    if (get(tent, 'pkg.scripts.tentpostinstall')) tentpostinstallScript.push(tent.pkg.scripts.tentpostinstall)
+    tentpostinstallScript.push(`tent-module-assign install`)
 
     let result = {}
     result.dependencies = dependencies
     if (size(localDependencies)) {
       result.localDependencies = localDependencies
-      result.scripts = scripts
+      result.scripts = {
+        "tentpostinstall": tentpostinstallScript.join(' && ')
+      }
       result.devDependencies = devDependencies
     }
     return result

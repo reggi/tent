@@ -40,6 +40,5 @@ export default class ModuleAssign {
     if (!this.pkg.localDependencies) throw new Error('missing localDependencies')
     this.localDependencies = this.pkg.localDependencies
     await this.aliasModules(this.localDependencies)
-    console.log(this)
   }
 }
